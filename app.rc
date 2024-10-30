@@ -1,0 +1,29 @@
+1 MANIFEST "app.manifest"
+MAINICON ICON "icons.ico"
+
+1 VERSIONINFO
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+FILEOS 0x4
+FILETYPE 0x1
+
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+			VALUE "CompanyName", "db config"
+			VALUE "FileDescription", "db config"
+			VALUE "FileVersion", "1.0.0.0"
+			VALUE "InternalName", "db config"
+			VALUE "LegalCopyright", "Copyright (C) dbConfig ."
+			VALUE "OriginalFilename", "db config"
+			VALUE "ProductName", "db config"
+			VALUE "ProductVersion", "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+            VALUE "Translation", 0x0409, 0x04B0
+    END
+END
