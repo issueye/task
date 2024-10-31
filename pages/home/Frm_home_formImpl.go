@@ -50,7 +50,7 @@ func (f *TFrm_job_form) SetData(data *bdb.Task) {
 	f.data = data
 	f.Edt_title.SetText(data.Title)
 	f.Edt_cron.SetText(data.Cron)
-	f.Edt_script_path.SetText(data.ScritpPath)
+	f.Edt_script_path.SetText(data.ScriptPath)
 	f.Mmo_remarks.SetText(data.Remarks)
 
 	if data.ScriptType == 0 {
@@ -87,7 +87,7 @@ func (f *TFrm_job_form) UpdateData() {
 	f.data.Title = f.Edt_title.Text()
 	f.data.Cron = f.Edt_cron.Text()
 	f.data.ScriptType = f.GetSelect()
-	f.data.ScritpPath = f.Edt_script_path.Text()
+	f.data.ScriptPath = f.Edt_script_path.Text()
 	f.data.Remarks = f.Mmo_remarks.Text()
 
 	err := bdb.GetBdb().UpdateTask(f.data)
@@ -102,7 +102,7 @@ func (f *TFrm_job_form) SaveData() {
 	data.Title = f.Edt_title.Text()
 	data.Cron = f.Edt_cron.Text()
 	data.ScriptType = f.GetSelect()
-	data.ScritpPath = f.Edt_script_path.Text()
+	data.ScriptPath = f.Edt_script_path.Text()
 	data.Remarks = f.Mmo_remarks.Text()
 
 	err := bdb.GetBdb().CreateTask(data)

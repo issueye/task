@@ -17,7 +17,7 @@ type Task struct {
 	Cron       string    `json:"cron"`        // cron表达式
 	Status     int       `json:"status"`      // 任务状态
 	ScriptType int       `json:"script_type"` // 脚本类型
-	ScritpPath string    `json:"script_path"` // 脚本路径
+	ScriptPath string    `json:"script_path"` // 脚本路径
 	Remarks    string    `json:"remarks"`     // 备注
 	LastRunAt  time.Time `json:"last_run_at"` // 上次运行时间
 	CreatedAt  time.Time `json:"created_at"`  // 创建时间
@@ -30,9 +30,9 @@ func (t *Task) TableName() string {
 
 func (b *Bdb) CreateTask(data *Task) error {
 	return b.db.Update(func(tx *bbolt.Tx) error {
-		bucket, err := tx.CreateBucketIfNotExists(TaskName)
-		if err != nil {
-			return err
+		bucket := tx.Bucket(TaskName)
+		if bucket == nil {
+			return ErrRecordNotFound
 		}
 
 		id, err := bucket.NextSequence()
@@ -58,7 +58,7 @@ func (b *Bdb) GetById(id int) (*Task, error) {
 	err := b.db.View(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(TaskName)
 		if bucket == nil {
-			return ErrBucketNotFound
+			return ErrRecordNotFound
 		}
 
 		data := bucket.Get(itob(id))
@@ -76,7 +76,7 @@ func (b *Bdb) UpdateTask(data *Task) error {
 	return b.db.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(TaskName)
 		if bucket == nil {
-			return ErrBucketNotFound
+			return ErrRecordNotFound
 		}
 
 		buf, err := json.Marshal(data)
@@ -92,7 +92,7 @@ func (b *Bdb) DeleteTask(id int) error {
 	return b.db.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(TaskName)
 		if bucket == nil {
-			return ErrBucketNotFound
+			return ErrRecordNotFound
 		}
 
 		return bucket.Delete(itob(id))
@@ -104,7 +104,7 @@ func (b *Bdb) GetTasks(condition string) ([]*Task, error) {
 	err := b.db.View(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(TaskName)
 		if bucket == nil {
-			return ErrBucketNotFound
+			return ErrRecordNotFound
 		}
 
 		cursor := bucket.Cursor()

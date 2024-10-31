@@ -43,9 +43,12 @@ type TaskInfo struct {
 }
 
 type TaskRun struct {
-	ID  int
-	Job func()
+	ID   int
+	Path string
+	Job  func()
 }
+
+
 
 func (tr TaskRun) Run() {
 	// 每次执行任务前，先记录日志

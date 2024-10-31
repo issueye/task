@@ -13,6 +13,8 @@ import (
 	"github.com/ying32/govcl/vcl/win"
 )
 
+type runFunc func() error
+
 func ShowHomeForm(owner vcl.IComponent) {
 	if Frm_job == nil {
 		Frm_job = NewFrm_job(owner)
@@ -67,22 +69,38 @@ func (f *TFrm_job) OnTable_dataButtonClick(sender vcl.IObject, aCol, aRow int32)
 	// 第五列 状态
 	if aCol == 5 {
 		// 更新状态
-		if f.Table_data.Cells(5, aRow) == "1" {
-			f.Table_data.SetCells(5, aRow, "0")
+		if f.Table_data.Cells(5, aRow) == "启用" {
+			f.Table_data.SetCells(5, aRow, "启用")
 		} else {
-			f.Table_data.SetCells(5, aRow, "1")
+			f.Table_data.SetCells(5, aRow, "停用")
 		}
 
 		// 更新数据
-		statusStr := f.Table_data.Cells(5, aRow)
-		status, _ := strconv.Atoi(statusStr)
-		f.list[aRow-1].Status = status
+		status := f.list[aRow-1].Status
+		if status == 1 {
+			f.list[aRow-1].Status = 0
+		} else {
+			f.list[aRow-1].Status = 1
+		}
+
 		bdb.GetBdb().UpdateTask(f.list[aRow-1])
+
+		status = f.list[aRow-1].Status
 
 		var err error
 		if status == 1 {
 			err = task.GetTaskCron().AddFunc(f.list[aRow-1], func() {
 				global.Logger.Sugar().Debugf("任务执行: %s", f.list[aRow-1].Title)
+
+				vm := global.CodeEngine.GetRuntime()
+				defer global.CodeEngine.PutRuntime(vm)
+
+				rFunc := new(runFunc)
+				err := vm.ExportFunc("main", f.list[aRow-1].ScriptPath, rFunc)
+				if err != nil {
+					global.Logger.Sugar().Errorf("导出方法失败：%s", err.Error())
+					return
+				}
 			})
 		} else {
 			err = task.GetTaskCron().Remove(f.list[aRow-1].ID)

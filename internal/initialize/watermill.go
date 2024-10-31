@@ -7,7 +7,7 @@ import (
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
 )
 
-func InitEvetnBus() {
+func InitEventBus() {
 	global.Logger.Sugar().Debug("初始化事件总线")
 	pubSub := gochannel.NewGoChannel(
 		gochannel.Config{},

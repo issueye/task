@@ -1,6 +1,8 @@
 package global
 
 import (
+	"task/internal/code_engine"
+
 	"github.com/ThreeDotsLabs/watermill/pubsub/gochannel"
 	"github.com/gin-gonic/gin"
 	"github.com/issueye/ipc_grpc/client"
@@ -16,11 +18,15 @@ var (
 	CookieKey   = "PLUGIN_TASK"
 	CookieValue = "vz9mr6vevv50zyd5pgnkw6vtkhvhzzm0"
 
+	RuntimePath string // 运行时路径
+
 	Router    *gin.Engine
 	IpcClient *client.Client
 	PubSub    *gochannel.GoChannel
 	Logger    *zap.Logger
 	LogClose  func()
+
+	CodeEngine *code_engine.Core
 )
 
 const (
