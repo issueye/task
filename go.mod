@@ -1,6 +1,8 @@
 module task
 
-go 1.21.6
+go 1.22
+
+toolchain go1.22.8
 
 require (
 	github.com/ThreeDotsLabs/watermill v1.4.0
@@ -37,12 +39,15 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
+	github.com/robfig/cron v1.2.0 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/shirou/gopsutil/v4 v4.24.9 // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
+	go.etcd.io/bbolt v1.3.11 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/crypto v0.26.0 // indirect

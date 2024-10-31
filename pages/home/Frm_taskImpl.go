@@ -12,7 +12,7 @@ import (
 type TFrm_taskFields struct {
 	ctx     context.Context
 	cancel  context.CancelFunc
-	FrmMain *TFrm_main
+	FrmMain *TFrm_job
 }
 
 func (f *TFrm_task) OnFormCreate(sender vcl.IObject) {

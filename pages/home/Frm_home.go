@@ -8,27 +8,31 @@ import (
 	"github.com/ying32/govcl/vcl"
 )
 
-type TFrm_main struct {
+type TFrm_job struct {
 	*vcl.TForm
-	Pnl_body *vcl.TPanel
-	Sb_bar   *vcl.TStatusBar
+	Pnl_query_form *vcl.TPanel
+	Btn_query      *vcl.TBitBtn
+	Edt_condition  *vcl.TLabeledEdit
+	Btn_add        *vcl.TBitBtn
+	Table_data     *vcl.TStringGrid
+	Imgs           *vcl.TImageList
 
 	// ::private::
-	TFrm_mainFields
+	TFrm_jobFields
 }
 
-var Frm_main *TFrm_main
+var Frm_job *TFrm_job
 
 // Loaded in bytes.
-// vcl.Application.CreateForm(&Frm_main)
+// vcl.Application.CreateForm(&Frm_job)
 
-func NewFrm_main(owner vcl.IComponent) (root *TFrm_main) {
+func NewFrm_job(owner vcl.IComponent) (root *TFrm_job) {
 	vcl.CreateResForm(owner, &root)
 	return
 }
 
 //go:embed Frm_home.gfm
-var Frm_mainBytes []byte
+var Frm_jobBytes []byte
 
 // 注册窗口资源
-var _ = vcl.RegisterFormResource(Frm_main, &Frm_mainBytes)
+var _ = vcl.RegisterFormResource(Frm_job, &Frm_jobBytes)
