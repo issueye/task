@@ -89,19 +89,7 @@ func (f *TFrm_job) OnTable_dataButtonClick(sender vcl.IObject, aCol, aRow int32)
 
 		var err error
 		if status == 1 {
-			err = task.GetTaskCron().AddFunc(f.list[aRow-1], func() {
-				global.Logger.Sugar().Debugf("任务执行: %s", f.list[aRow-1].Title)
-
-				vm := global.CodeEngine.GetRuntime()
-				defer global.CodeEngine.PutRuntime(vm)
-
-				rFunc := new(runFunc)
-				err := vm.ExportFunc("main", f.list[aRow-1].ScriptPath, rFunc)
-				if err != nil {
-					global.Logger.Sugar().Errorf("导出方法失败：%s", err.Error())
-					return
-				}
-			})
+			err = task.GetTaskCron().AddFunc(f.list[aRow-1], Call(f.list[aRow-1]))
 		} else {
 			err = task.GetTaskCron().Remove(f.list[aRow-1].ID)
 		}
@@ -137,6 +125,30 @@ func (f *TFrm_job) OnTable_dataButtonClick(sender vcl.IObject, aCol, aRow int32)
 	}
 
 	f.GetData()
+}
+
+func Call(data *bdb.Task) func() {
+	return func() {
+		defer func() {
+			if err := recover(); err != nil {
+				global.Logger.Sugar().Errorf("任务执行失败：%s", err)
+			}
+		}()
+
+		global.Logger.Sugar().Debugf("任务执行: %s", data.Title)
+		vm := global.CodeEngine.GetRuntime()
+		defer global.CodeEngine.PutRuntime(vm)
+
+		rFunc := new(runFunc)
+		err := vm.ExportFunc("main", data.ScriptPath, rFunc)
+		if err != nil {
+			global.Logger.Sugar().Errorf("导出方法失败：%s", err.Error())
+			return
+		}
+
+		// 调用方法
+		(*rFunc)()
+	}
 }
 
 func (f *TFrm_job) GetData() {
